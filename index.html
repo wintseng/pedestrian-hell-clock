@@ -356,6 +356,14 @@
             window.open(shareUrl, 'facebook-share-dialog', 'width=626,height=436');
         }
 
+        function shareToThreads() {
+            const currentUrl = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent("這是不斷計時的台灣「行人地獄・末日時鐘」，直到改變發生的那一天。");
+            const shareUrl = `https://www.threads.net/intent/post?text=${text}%0A${currentUrl}`;
+            
+            window.open(shareUrl, '_blank');
+        }
+
         // === 渲染邏輯 ===
         const timelineRoot = document.getElementById('timeline-root');
 
@@ -394,8 +402,11 @@
                         <a href="${event.newsUrl}" target="_blank" class="footer-btn">
                             <i class="fas fa-external-link-alt"></i> 來源
                         </a>
+                        <div class="footer-btn" onclick="shareToThreads()">
+                            <i class="fa-brands fa-threads"></i> Threads
+                        </div>
                         <div class="footer-btn" onclick="shareToFB()">
-                            <i class="fas fa-share"></i> 分享
+                            <i class="fa-brands fa-facebook-f"></i> 分享
                         </div>
                     </div>
                 </div>
