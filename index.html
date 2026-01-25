@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-site-verification" content="CwqBOevqcAKeJkLBVyapApq-2A0lFEVA-v7xLtvNraQ" />
     <title>行人地獄・末日時鐘</title>
     <meta property="og:title" content="行人地獄・末日時鐘" />
     <meta property="og:description" content="紀錄台灣道路上的不幸，直到改變發生的那一天。" />
     <meta property="og:type" content="website" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
         :root {
@@ -345,10 +346,75 @@
                 left: 0;
             }
         }
+        /* === 右上角掛繩小白板計數器 === */
+        
+        /* 1. 繪製掛繩 (利用偽元素) */
+        .wb-container::before {
+            content: '';
+            position: absolute;
+            top: -15px; /* 繩子頂端超出螢幕 */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px; /* 繩子跨度 */
+            height: 40px; /* 繩子垂下的弧度 */
+            border-bottom: 4px solid #8b4513; /* 棕色繩子 */
+            border-radius: 50%; /* 做出圓弧形 */
+            z-index: -1; /* 放在小白板後面 */
+        }
+
+        /* 2. 繪製小白板主體 */
+        .wb-container {
+            position: fixed;
+            top: 25px; /* 距離頂部 */
+            right: 20px; /* 距離右側 */
+            z-index: 200; /* 確保在最上層 */
+            
+            background-color: #f4f4f4; /* 白板表面顏色 */
+            border: 5px solid #d3d3d3; /* 銀灰色金屬/塑膠邊框 */
+            border-radius: 6px;
+            padding: 5px 20px;
+            box-shadow: 3px 4px 8px rgba(0,0,0,0.4); /* 真實陰影 */
+            
+            /* 加上一點點傾斜，看起來更真實 */
+            transform: rotate(-2deg); 
+        }
+
+        /* 3. 手寫數字樣式 */
+        #event-total-count {
+            font-family: 'Kalam', cursive; /* 使用剛引入的手寫字型 */
+            font-size: 2.6rem;
+            font-weight: bold;
+            font-style: italic; /* 斜體 */
+            color: #c90505; /* 深灰色墨水感 */
+            display: block;
+            text-align: center;
+            line-height: 1;
+        }
+
+        /* 手機版調整大小與位置，避免擋到太多 */
+        @media screen and (max-width: 600px) {
+            .wb-container {
+                top: 15px;
+                right: 10px;
+                padding: 2px 15px;
+                border-width: 3px;
+            }
+            .wb-container::before {
+                width: 60px;
+                height: 30px;
+                border-bottom-width: 3px;
+            }
+            #event-total-count {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 
 <body>
+    <div class="wb-container">
+        <span id="event-total-count">0</span>
+    </div>
     <header>
         <h1>
             <i class="fas fa-exclamation-triangle"></i>
@@ -536,6 +602,8 @@
             document.getElementById("update-date").innerText = `最後更新的事件發生於：${events[0].date
                 }`;
         }
+        // 自動更新右上角小白板的事件總數
+        document.getElementById('event-total-count').innerText = events.length;
     </script>
 </body>
 
