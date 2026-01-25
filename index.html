@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-TW">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>行人地獄・末日時鐘</title>
     <meta property="og:title" content="行人地獄・末日時鐘" />
     <meta property="og:description" content="紀錄台灣道路上的不幸，直到改變發生的那一天。" />
     <meta property="og:type" content="website" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
         :root {
             --bg-color: #18191a;
@@ -22,7 +22,7 @@
         }
 
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-primary);
             margin: 0;
@@ -33,7 +33,9 @@
         header {
             text-align: center;
             padding: 40px 20px;
-            background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(24, 25, 26, 1) 100%);
+            background: linear-gradient(180deg,
+                    rgba(0, 0, 0, 0.8) 0%,
+                    rgba(24, 25, 26, 1) 100%);
             border-bottom: 1px solid var(--timeline-line);
         }
 
@@ -61,7 +63,7 @@
         }
 
         .timeline::after {
-            content: '';
+            content: "";
             position: absolute;
             width: 4px;
             background-color: var(--timeline-line);
@@ -80,7 +82,7 @@
         }
 
         .container::after {
-            content: '';
+            content: "";
             position: absolute;
             width: 20px;
             height: 20px;
@@ -170,7 +172,7 @@
         }
 
         .fb-body {
-            padding: 0 16px 16px 16px;
+            padding: 0 16px 16px;
             font-size: 0.95rem;
             white-space: pre-line;
         }
@@ -241,13 +243,79 @@
             font-size: 1.15rem;
             overflow-wrap: break-word;
         }
+
         .dash-divider {
             margin-bottom: 20px;
             padding-bottom: 20px;
             border-bottom: 1px solid #3e4042;
         }
+
         .text-warning {
             color: #ff6b6b;
+        }
+
+        /* 天數間隔標籤 */
+        .day-diff {
+            position: absolute;
+            bottom: -35px;
+            /* 位於卡片下方 */
+            background-color: var(--timeline-line);
+            color: var(--accent-red);
+            font-weight: bold;
+            font-size: 0.85rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            z-index: 5;
+            white-space: nowrap;
+            border: 1px solid var(--accent-red);
+            box-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
+        }
+
+        /* 讓標籤剛好貼在中間的線 */
+        .left .day-diff {
+            right: -60px;
+            /* 針對左側卡片，向右偏移貼線 */
+        }
+
+        .right .day-diff {
+            left: -60px;
+            /* 針對右側卡片，向左偏移貼線 */
+        }
+
+        /* 最後更新日期樣式 */
+        .last-updated {
+            position: fixed;
+            bottom: 15px;
+            right: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background-color: rgba(24, 25, 26, 0.8);
+            /* 半透明背景確保在任何背景上都清晰 */
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 100;
+            pointer-events: none;
+            /* 防止遮擋下方按鈕點擊 */
+            letter-spacing: 1px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .last-updated {
+                bottom: 5px;
+                right: 10px;
+                font-size: 0.7rem;
+            }
+        }
+
+        /* 手機版調整：所有標籤統一靠左對齊時間線 */
+        @media screen and (max-width: 600px) {
+
+            .left .day-diff,
+            .right .day-diff {
+                left: -8px;
+                right: auto;
+                bottom: -30px;
+            }
         }
 
         @media screen and (max-width: 600px) {
@@ -274,53 +342,81 @@
             }
 
             .right {
-                left: 0%;
+                left: 0;
             }
         }
     </style>
 </head>
 
 <body>
-
     <header>
-        <h1><i class="fas fa-exclamation-triangle"></i> 行人地獄・末日時鐘</h1>
+        <h1>
+            <i class="fas fa-exclamation-triangle"></i>
+            行人地獄・末日時鐘
+        </h1>
         <p class="subtitle">紀錄台灣道路上的不幸，直到改變發生的那一天。</p>
     </header>
 
-    <div class="timeline" id="timeline-root">
-    </div>
+    <div class="timeline" id="timeline-root"></div>
 
     <div class="divider"></div>
-    
+
     <section class="step container-wide">
-        <h2 style="font-size: 1.5rem;color: #04bb2b;">事情的開始</h2>
-        新聞影片 Youtube: <a href="https://www.youtube.com/embed/Xhu4sICBUCA">https://www.youtube.com/embed/Xhu4sICBUCA</a>
-        
+        <h2 style="font-size: 1.5rem; color: #04bb2b">事情的開始</h2>
+        新聞影片 Youtube:
+        <a href="https://www.youtube.com/embed/Xhu4sICBUCA">https://www.youtube.com/embed/Xhu4sICBUCA</a>
+
         <p>1月還沒過完，今年第一起行人地獄的事件已經發生，令人感到痛心不已。</p>
         <p class="dash-divider"></p>
-        <p class="dash-divider text-warning">向 Gemini 求教: 1. 這是十年來的第 N 件？2.第N＋1大約會在多久後發生？答案令人震驚許久不能平復。</p>
+        <p class="dash-divider text-warning">
+            向 Gemini 求教: 1. 這是十年來的第 N
+            件？2.第N＋1大約會在多久後發生？答案令人震驚許久不能平復。
+        </p>
         <p>轉貼內容於下：</p>
-        <p>這是一個令人遺憾且沉重的議題。針對您提到的2026年1月21日發生在台北市建國高架橋下的這起悲劇（65歲吳姓男子遭左轉車撞擊後再被後車輾斃），以及您詢問的數據統計，以下為您整理的資訊與分析：</p>
+        <p>
+            這是一個令人遺憾且沉重的議題。針對您提到的2026年1月21日發生在台北市建國高架橋下的這起悲劇（65歲吳姓男子遭左轉車撞擊後再被後車輾斃），以及您詢問的數據統計，以下為您整理的資訊與分析：
+        </p>
         <p>1. 這是十年來第幾次類似死亡案件？</p>
         <p></p>
-        <p>雖然無法精確到「個位數」的即時統計（因官方數據通常為年度或月度結算），但根據交通部道安會與警政署過去十年的公開統計資料推算，這大約是十年來的第 3,500 至 4,000 起行人死亡案件。</p>
-        <p>推算依據：台灣近年的行人交通事故死亡人數（30日死亡人數）平均每年約在 300 至 400 人 之間。</p>
-        <p>2025年（去年）：根據截至10月的統計，行人死亡人數約 295 人，全年推估約 350 人左右（創近年新低）。</p>
+        <p>
+            雖然無法精確到「個位數」的即時統計（因官方數據通常為年度或月度結算），但根據交通部道安會與警政署過去十年的公開統計資料推算，這大約是十年來的第
+            3,500 至 4,000 起行人死亡案件。
+        </p>
+        <p>
+            推算依據：台灣近年的行人交通事故死亡人數（30日死亡人數）平均每年約在 300
+            至 400 人 之間。
+        </p>
+        <p>
+            2025年（去年）：根據截至10月的統計，行人死亡人數約 295 人，全年推估約
+            350 人左右（創近年新低）。
+        </p>
         <p>2024年：全年行人死亡 366 人。</p>
         <p>2023年：全年行人死亡 380 人。</p>
         <p>2019年：曾高達 458 人。</p>
-        <p class="dash-divider">結論：若將過去十年（2016-2025）的數據加總，台灣已有約 **3,800 個家庭** 因為類似的「行人地獄」交通環境而破碎。這起1月21日的案件，只是龐大數據中最新的一個悲傷數字。</p>
+        <p class="dash-divider">
+            結論：若將過去十年（2016-2025）的數據加總，台灣已有約 **3,800 個家庭**
+            因為類似的「行人地獄」交通環境而破碎。這起1月21日的案件，只是龐大數據中最新的一個悲傷數字。
+        </p>
         <p class="text-warning">2. 下一個「行人地獄」事件大約會是幾天後？</p>
-        <p class="dash-divider text-warning">根據過去幾年的統計平均值，下一個類似的悲劇，在統計學上大約會在「明天」或「24小時內」發生。</p>
+        <p class="dash-divider text-warning">
+            根據過去幾年的統計平均值，下一個類似的悲劇，在統計學上大約會在「明天」或「24小時內」發生。
+        </p>
         <p>計算方式：</p>
         <p>若以近年平均每年約 365-380 位行人死亡計算。</p>
-        <p class="dash-divider">平均每天約有 1.0 至 1.04 位 行人因交通事故死亡。</p>
-        <p class="text-warning dash-divider">預測：這意味著，台灣幾乎 「每天」 都在發生行人死亡事故。雖然像1月21日這種「左轉撞擊+後車輾過」的驚悚案件可能較少見（且會被媒體大幅報導），但廣義的「行人因車禍死亡」事件，統計上幾乎是 每天發生 的常態。</p>
+        <p class="dash-divider">
+            平均每天約有 1.0 至 1.04 位 行人因交通事故死亡。
+        </p>
+        <p class="text-warning dash-divider">
+            預測：這意味著，台灣幾乎 「每天」
+            都在發生行人死亡事故。雖然像1月21日這種「左轉撞擊+後車輾過」的驚悚案件可能較少見（且會被媒體大幅報導），但廣義的「行人因車禍死亡」事件，統計上幾乎是
+            每天發生 的常態。
+        </p>
         <p>案件背景補充（2026.01.21 台北建國高架案）</p>
-        <p>您提到的這起案件發生於台北市中山區建國高架橋下。65歲的吳姓男子在斑馬線上，先遭一輛左轉的馬自達休旅車撞倒，隨後因視線死角或反應不及，遭後方一輛賓士轎車輾過。這類案件典型地反映了「A柱死角」、「未禮讓行人」以及「駕駛防禦性不足」等長期存在的交通問題。</p>
-
+        <p>
+            您提到的這起案件發生於台北市中山區建國高架橋下。65歲的吳姓男子在斑馬線上，先遭一輛左轉的馬自達休旅車撞倒，隨後因視線死角或反應不及，遭後方一輛賓士轎車輾過。這類案件典型地反映了「A柱死角」、「未禮讓行人」以及「駕駛防禦性不足」等長期存在的交通問題。
+        </p>
     </section>
-
+    <div class="last-updated" id="update-date">最後更新：2026-01-25</div>
     <script>
         // === 資料區 ===
         // 請在這裡填入 newsUrl (新聞連結)
@@ -329,22 +425,27 @@
                 date: "2026-01-24",
                 location: "彰化市/中正路、中民街口",
                 title: "行人地獄再現：僅隔兩日又傳噩耗",
-                description: "距離上一起建國高架事故僅僅兩天。這不是意外，這是系統性的殺戮。\n\n我們需要的不只是哀悼，而是道路設計的根本改革。今天我們又失去了一位同胞，下一個會是誰？",
+                description:
+                    "距離上一起建國高架事故僅僅兩天。這不是意外，這是系統性的殺戮。\n\n我們需要的不只是哀悼，而是道路設計的根本改革。今天我們又失去了一位同胞，下一個會是誰？",
                 type: "image",
-                mediaUrl: "https://img.ltn.com.tw/Upload/news/600/2026/01/24/5320565_1_1.jpg",
-                newsUrl: "https://news.ltn.com.tw/news/society/breakingnews/5320565?fbclid=IwY2xjawPhnxxleHRuA2FlbQIxMQBicmlkETFSOENLUjFQU1hJWkZ4eXpQc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHmo9K5iwbvzlgDNECNT33Mu_Ld0ekFP71J86L9p03XP1mgwgcJefzoVHTiiT_aem_NwZsXeUoi3SVIj-7vHm4iQ", // 範例連結
-                source: "自由時報"
+                mediaUrl:
+                    "https://img.ltn.com.tw/Upload/news/600/2026/01/24/5320565_1_1.jpg",
+                newsUrl:
+                    "https://news.ltn.com.tw/news/society/breakingnews/5320565?fbclid=IwY2xjawPhnxxleHRuA2FlbQIxMQBicmlkETFSOENLUjFQU1hJWkZ4eXpQc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHmo9K5iwbvzlgDNECNT33Mu_Ld0ekFP71J86L9p03XP1mgwgcJefzoVHTiiT_aem_NwZsXeUoi3SVIj-7vHm4iQ", // 範例連結
+                source: "自由時報",
             },
             {
                 date: "2026-01-21",
                 location: "台北市/建國高架",
                 title: "2026首起：左轉撞擊後遭輾斃",
-                description: "65歲吳姓男子依規定行走在斑馬線上，卻遭左轉車輛撞擊，隨後被後方反應不及的車輛二次輾壓。\n\n根據統計，類似的悲劇在台灣平均每天發生一次。駕駛的A柱死角與「切西瓜」式左轉，是行人最大的殺手。",
+                description:
+                    "65歲吳姓男子依規定行走在斑馬線上，卻遭左轉車輛撞擊，隨後被後方反應不及的車輛二次輾壓。\n\n根據統計，類似的悲劇在台灣平均每天發生一次。駕駛的A柱死角與「切西瓜」式左轉，是行人最大的殺手。",
                 type: "image",
-                mediaUrl: "https://imgcdn.cna.com.tw/www/WebPhotos/1024/20260121/1024x768_wmky_0_C20260121000240.jpg",
+                mediaUrl:
+                    "https://imgcdn.cna.com.tw/www/WebPhotos/1024/20260121/1024x768_wmky_0_C20260121000240.jpg",
                 newsUrl: "https://www.cna.com.tw/news/asoc/202601210363.aspx", // 範例連結
-                source: "中央社"
-            }
+                source: "中央社",
+            },
         ];
 
         // === FB 分享功能 ===
@@ -353,34 +454,45 @@
             const currentUrl = encodeURIComponent(window.location.href);
             const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
             // 開啟彈跳視窗
-            window.open(shareUrl, 'facebook-share-dialog', 'width=626,height=436');
+            window.open(shareUrl, "facebook-share-dialog", "width=626,height=436");
         }
 
         function shareToThreads() {
             const currentUrl = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent("這是不斷計時的台灣「行人地獄・末日時鐘」，直到改變發生的那一天。");
+            const text = encodeURIComponent(
+                "這是不斷計時的台灣「行人地獄・末日時鐘」，直到改變發生的那一天。",
+            );
             const shareUrl = `https://www.threads.net/intent/post?text=${text}%0A${currentUrl}`;
-            
-            window.open(shareUrl, '_blank');
+
+            window.open(shareUrl, "_blank");
         }
 
         // === 渲染邏輯 ===
-        const timelineRoot = document.getElementById('timeline-root');
+        const timelineRoot = document.getElementById("timeline-root");
 
         events.forEach((event, index) => {
-            const positionClass = index % 2 === 0 ? 'left' : 'right';
+            const positionClass = index % 2 === 0 ? "left" : "right";
 
-            let mediaContent = '';
-            if (event.type === 'youtube') {
-                const src = event.mediaUrl.includes('http') ? event.mediaUrl : `https://www.youtube.com/embed/${event.mediaUrl}`;
+            // --- 新增：計算天數差 ---
+            let diffHtml = "";
+            if (index < events.length - 1) {
+                const dateLater = new Date(event.date);
+                const dateEarlier = new Date(events[index + 1].date);
+                const diffTime = Math.abs(dateLater - dateEarlier);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                diffHtml = `<div class="day-diff">相隔 ${diffDays} 天</div>`;
+            }
+
+            let mediaContent = "";
+            if (event.type === "youtube") {
+                const src = event.mediaUrl.includes("http")
+                    ? event.mediaUrl
+                    : `https://www.youtube.com/embed/${event.mediaUrl}`;
                 mediaContent = `<iframe src="${src}" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-            } else if (event.type === 'image') {
+            } else if (event.type === "image") {
                 mediaContent = `<img src="${event.mediaUrl}" alt="${event.title}">`;
             }
 
-            // 修改重點：Footer 區域
-            // 1. "來源" 使用 <a> 標籤，target="_blank" 開新分頁
-            // 2. "分享" 使用 onclick 呼叫 shareToFB()
             const html = `
             <div class="container ${positionClass}">
                 <div class="content">
@@ -410,13 +522,21 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                ${diffHtml} </div>
         `;
 
             timelineRoot.innerHTML += html;
         });
-    </script>
 
+        // 更新最後更新日期
+        // document.getElementById('update-date').textContent = '最後更新：' + new Date().toLocaleDateString('zh-TW');
+
+        // 自動更新右下角的日期為最新事件的日期
+        if (events.length > 0) {
+            document.getElementById("update-date").innerText = `最後更新：${events[0].date
+                }`;
+        }
+    </script>
 </body>
 
 </html>
