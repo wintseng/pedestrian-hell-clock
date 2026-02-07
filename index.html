@@ -484,49 +484,6 @@
     </section>
     <div class="last-updated" id="update-date">最後更新：2026-01-25</div>
     <script>
-        // === 資料區 ===
-        // 請在這裡填入 newsUrl (新聞連結)
-        const events = [
-            {
-                date: "2026-02-03",
-                location: "北市內湖區康寧路",
-                title: "行人地獄又起！內湖小客車衝撞釀1死 斑馬線上路人送醫不治",
-                description:
-                    "距離上一起建國高架事故僅僅兩天。這不是意外，這是系統性的殺戮。\n\n我們需要的不只是哀悼，而是道路設計的根本改革。今天我們又失去了一位同胞，下一個會是誰？",
-                type: "image",
-                mediaUrl:
-                    "https://s.yimg.com/ny/api/res/1.2/0qM.1nAq_wxMKYWwCY27PQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTk2MDtoPTY4MQ--/https://media.zenfs.com/ko/nextapple_com_761/4c1032eb8b2e61911bcf6977758872d8",
-                newsUrl:
-                    "https://tw.news.yahoo.com/行人地獄又起-內湖小客車衝撞釀1死-斑馬線上路人送醫不治-102900643.html", 
-                source: "壹蘋新聞網",
-            },
-            {
-                date: "2026-01-24",
-                location: "彰化市/中正路、中民街口",
-                title: "行人地獄再現：僅隔兩日又傳噩耗",
-                description:
-                    "距離上一起建國高架事故僅僅兩天。這不是意外，這是系統性的殺戮。\n\n我們需要的不只是哀悼，而是道路設計的根本改革。今天我們又失去了一位同胞，下一個會是誰？",
-                type: "image",
-                mediaUrl:
-                    "https://img.ltn.com.tw/Upload/news/600/2026/01/24/5320565_1_1.jpg",
-                newsUrl:
-                    "https://news.ltn.com.tw/news/society/breakingnews/5320565?fbclid=IwY2xjawPhnxxleHRuA2FlbQIxMQBicmlkETFSOENLUjFQU1hJWkZ4eXpQc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHmo9K5iwbvzlgDNECNT33Mu_Ld0ekFP71J86L9p03XP1mgwgcJefzoVHTiiT_aem_NwZsXeUoi3SVIj-7vHm4iQ", 
-                source: "自由時報",
-            },
-            {
-                date: "2026-01-21",
-                location: "台北市/建國高架",
-                title: "2026首起：左轉撞擊後遭輾斃",
-                description:
-                    "65歲吳姓男子依規定行走在斑馬線上，卻遭左轉車輛撞擊，隨後被後方反應不及的車輛二次輾壓。\n\n根據統計，類似的悲劇在台灣平均每天發生一次。駕駛的A柱死角與「切西瓜」式左轉，是行人最大的殺手。",
-                type: "image",
-                mediaUrl:
-                    "https://imgcdn.cna.com.tw/www/WebPhotos/1024/20260121/1024x768_wmky_0_C20260121000240.jpg",
-                newsUrl: "https://www.cna.com.tw/news/asoc/202601210363.aspx", 
-                source: "中央社",
-            },
-        ];
-
         // === FB 分享功能 ===
         function shareToFB() {
             // 取得當前網頁網址
@@ -547,32 +504,33 @@
         }
 
         // === 渲染邏輯 ===
-        const timelineRoot = document.getElementById("timeline-root");
+        function renderEvents(events) {
+            const timelineRoot = document.getElementById("timeline-root");
 
-        events.forEach((event, index) => {
-            const positionClass = index % 2 === 0 ? "left" : "right";
+            events.forEach((event, index) => {
+                const positionClass = index % 2 === 0 ? "left" : "right";
 
-            // --- 新增：計算天數差 ---
-            let diffHtml = "";
-            if (index < events.length - 1) {
-                const dateLater = new Date(event.date);
-                const dateEarlier = new Date(events[index + 1].date);
-                const diffTime = Math.abs(dateLater - dateEarlier);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                diffHtml = `<div class="day-diff">相隔 ${diffDays} 天</div>`;
-            }
+                // --- 新增：計算天數差 ---
+                let diffHtml = "";
+                if (index < events.length - 1) {
+                    const dateLater = new Date(event.date);
+                    const dateEarlier = new Date(events[index + 1].date);
+                    const diffTime = Math.abs(dateLater - dateEarlier);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    diffHtml = `<div class="day-diff">相隔 ${diffDays} 天</div>`;
+                }
 
-            let mediaContent = "";
-            if (event.type === "youtube") {
-                const src = event.mediaUrl.includes("http")
-                    ? event.mediaUrl
-                    : `https://www.youtube.com/embed/${event.mediaUrl}`;
-                mediaContent = `<iframe src="${src}" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-            } else if (event.type === "image") {
-                mediaContent = `<img src="${event.mediaUrl}" alt="${event.title}">`;
-            }
+                let mediaContent = "";
+                if (event.type === "youtube") {
+                    const src = event.mediaUrl.includes("http")
+                        ? event.mediaUrl
+                        : `https://www.youtube.com/embed/${event.mediaUrl}`;
+                    mediaContent = `<iframe src="${src}" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                } else if (event.type === "image") {
+                    mediaContent = `<img src="${event.mediaUrl}" alt="${event.title}">`;
+                }
 
-            const html = `
+                const html = `
             <div class="container ${positionClass}">
                 <div class="content">
                     <div class="fb-header">
@@ -604,19 +562,30 @@
                 ${diffHtml} </div>
         `;
 
-            timelineRoot.innerHTML += html;
-        });
+                timelineRoot.innerHTML += html;
+            });
 
-        // 更新最後更新日期
-        // document.getElementById('update-date').textContent = '最後更新：' + new Date().toLocaleDateString('zh-TW');
+            // 更新最後更新日期
+            // document.getElementById('update-date').textContent = '最後更新：' + new Date().toLocaleDateString('zh-TW');
 
-        // 自動更新右下角的日期為最新事件的日期
-        if (events.length > 0) {
-            document.getElementById("update-date").innerText = `最後更新的事件發生於：${events[0].date
-                }`;
+            // 自動更新右下角的日期為最新事件的日期
+            if (events.length > 0) {
+                document.getElementById("update-date").innerText = `最後更新的事件發生於：${events[0].date
+                    }`;
+            }
+            // 自動更新右上角小白板的事件總數
+            document.getElementById('event-total-count').innerText = events.length;
         }
-        // 自動更新右上角小白板的事件總數
-        document.getElementById('event-total-count').innerText = events.length;
+
+        // === 使用 AJAX 從 events.json 加載事件 ===
+        fetch('events.json')
+            .then(response => response.json())
+            .then(events => renderEvents(events))
+            .catch(error => {
+                console.error('無法加載事件資料:', error);
+                // 如果加載失敗，顯示錯誤信息
+                document.getElementById('timeline-root').innerHTML = '<p style="color: #ff6b6b; text-align: center; padding: 20px;">無法加載事件資料</p>';
+            });
     </script>
 </body>
 
